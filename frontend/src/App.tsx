@@ -1,5 +1,5 @@
-import Landing from './pages/Landing'
+import Chat from './components/Chat'
 
 export default function App() {
-  return <Landing />
+  return <Chat />
 }

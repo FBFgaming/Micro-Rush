@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -e ".[dev]"
+
+      - name: Run tests
+        run: |
+          cd backend
+          pytest tests/ -v --tb=short
+
+      - name: Type check
+        run: |
+          cd backend
+          mypy src/microrush --ignore-missing-imports
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Lint
+        run: |
+          cd frontend
+          npm run lint || true
+
+      - name: Build
+        run: |
+          cd frontend
+          npm run build
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend Docker image
+        run: |
+          cd backend
+          docker build -t microrush-backend:test .
+
+      - name: Build frontend Docker image
+        run: |
+          cd frontend
+          docker build -t microrush-frontend:test .
