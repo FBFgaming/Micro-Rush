@@ -48,7 +48,7 @@ class RecallMemory:
     """
 
     def __init__(self, db_path: str = "memory_recall.db"):
-        self.engine = create_engine(f"sqlite+aiosqlite:///{db_path}")
+        self.engine = create_engine(f"sqlite:///{db_path}")
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
 
