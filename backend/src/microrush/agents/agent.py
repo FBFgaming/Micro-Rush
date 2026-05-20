@@ -48,7 +48,7 @@ class MicroRushAgent:
 
     def __init__(
         self,
-        model_name: str = "llama3.2",
+        model_name: str = "phi",
         base_url: str = "http://localhost:11434",
         recall_db: str = "memory_recall.db",
         archival_dir: str = "memory_archival",
